@@ -108,12 +108,13 @@ void ErrorManager(enum States _type, Production* p)
 		fprintf(stdout, "\n!!! ERROR : NO INIT SYMBOL EXISTS IN THE CURRENT GRAMMAR! \n");
 		break;
 	case NO_NT:
-		print_word(p);
-		fprintf(stdout, " ERROR : NO NT! \n");
+		print_production(p);
+		fprintf(stdout, " ERROR : No NT in the left side of production \n");
 		break;
 	case NO_PRODSYM:
-		
-		fprintf(stdout, " ERROR : No production symbol! ->");
+		print_word(&p->left);
+		print_word(&p->right);
+		fprintf(stdout, "<- ERROR : No production symbol! \n");
 		
 		break;
 	

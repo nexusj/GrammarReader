@@ -58,6 +58,7 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 {
 	
 	enum States current_state = START;  // Stato iniziale
+	enum States error = -1;
 	Symbol s;
 	Production* p = NULL;
 	
@@ -68,6 +69,7 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 	{
 		s = read_sym(file);
 		if (feof(file)) break;
+		
 		switch (current_state)
 		{
 		case START:
@@ -97,13 +99,15 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 			else if (is_prodsym(s))
 			{
 				current_state = RIGHT;
+				
 				if (!CheckNonTerminal(p))
 					ErrorManager(NO_NT, p);
 			}
 			else
 			{
 				
-				ErrorManager(NO_PRODSYM, p);
+				
+				error = NO_PRODSYM;
 				current_state = RIGHT;
 			}
 			break;
@@ -117,8 +121,9 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 			else if (is_prodsep(s))
 			{
 				current_state = START;
+				ErrorManager(error, p);
+				
 			}
-			
 			break;
 		
 			
@@ -127,11 +132,13 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 		
 	}
 
-	if (!CheckInitSymbol(g))
+	if (!CheckInitSymbol(g) )
 	{
 		ErrorManager(NO_INITSYM, NULL);
 		g = NULL;
 	}
+	else if (error != -1)
+		g = NULL;
 		
 
 		
