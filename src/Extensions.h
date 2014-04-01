@@ -9,7 +9,8 @@ int CheckInitSymbol(Grammar* g);
 int GrammarCF(Grammar* g);
 int IsMonotonic(Grammar* g);
 int IsRightLinear(Grammar* g);
-void ErrorManager(enum States _type, Production* p);
+void ErrorManager(enum States _type, Production* p, int _line);
+void DeleteProduction(Grammar* g ,int _index);
 
 
 

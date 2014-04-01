@@ -89,6 +89,7 @@ int IsRightLinear(Grammar* g)
 				if (is_nonterminal(g->productions[i].right.word[0]) && is_terminal(g->productions[i].right.word[1]))
 					_isRightLinear = 0;
 			}
+			else if(g->productions[i].right.length == 0) _isRightLinear = 1;
 			else _isRightLinear = 0;
 		}
 		else
@@ -98,26 +99,44 @@ int IsRightLinear(Grammar* g)
 	return _isRightLinear;
 }
 
-void ErrorManager(enum States _type, Production* p)
+void ErrorManager(enum States _type, Production* p, int _line)
 {
 	switch (_type)
 	{
 	
 	case NO_INITSYM:
 		
-		fprintf(stdout, "\n!!! ERROR : NO INIT SYMBOL EXISTS IN THE CURRENT GRAMMAR! \n");
+		fprintf(stdout, "\n!!! ERROR : Missing INIT SYMBOL in the current grammar! \n");
 		break;
 	case NO_NT:
 		print_production(p);
-		fprintf(stdout, " ERROR : No NT in the left side of production \n");
+		fprintf(stdout, " ERROR : Missing NT in the left side of production (%d) \n",_line);
 		break;
 	case NO_PRODSYM:
 		print_word(&p->left);
+		fprintf(stdout,"[!] ");
 		print_word(&p->right);
-		fprintf(stdout, "<- ERROR : No production symbol! \n");
+		fprintf(stdout, "ERROR : Missing production symbol in production (%d) \n",_line);
 		
+		break;
+	case INDEX_OUT_RANGE:
+		fprintf(stdout,"ERROR! Index out of range! \n");
 		break;
 	
 	}
+}
+
+
+void DeleteProduction(Grammar* g,int _index)
+{
+	
+	if(_index < 0 || _index > g->numprod )
+		ErrorManager(INDEX_OUT_RANGE,NULL,0);
+	else
+	{
+		g->productions[_index-1] = g->productions[g->numprod-1];
+		g->numprod--;
+	}
+	
 }
 
