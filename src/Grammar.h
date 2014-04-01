@@ -10,10 +10,10 @@
 #define MAX_WORD_LENGTH 100
 #define MAX_PRODUCTIONS 100
 
-#pragma region Structers
+#pragma region Structures
 typedef char Symbol;
 
-enum States { START, LEFT, RIGHT, NO_INITSYM, NO_NT, NO_PRODSYM};
+enum States { START, LEFT, RIGHT, NO_INITSYM, NO_NT, NO_PRODSYM, INDEX_OUT_RANGE};
 /*   START  = Scansione di una nuova produzione [F]
 LEFT   = Scansione della parte sinistra
 RIGHT  = Scansione della parte destra [F]
