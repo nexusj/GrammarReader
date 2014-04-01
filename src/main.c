@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #include "Grammar.h"
 #include "Extensions.h"
@@ -15,7 +16,7 @@ int main(int argc, char *argv[])
 	char* filename = argv[1];
 	FILE* gram_file;
 	Grammar grammar;
-
+	int choice = 0;
 	// controlla se è stato inserito il nome del file
 
 	if (filename == 0)
@@ -32,14 +33,14 @@ int main(int argc, char *argv[])
 	gram_file = fopen(filename, "r");
 	if (gram_file == NULL)
 	{
-		printf("nome di file errato\n");
+		fprintf(stderr, "Errore durante il caricamento della grammatica: %s \n", strerror(errno));
 	
 		system("PAUSE");
 		return -1;
 	}
 
 	print_grammar(load_grammar(gram_file, &grammar));
-
+	
 	fclose(gram_file);
 
 	//1 punto
@@ -55,8 +56,15 @@ int main(int argc, char *argv[])
 	//fprintf(stdout, "is Monotonic?: %s\n", IsMonotonic(&grammar) ? "True" : "False");
 
 	//5 punto
-	//fprintf(stdout, "is Monotonic?: %s\n", IsRightLinear(&grammar) ? "True" : "False");
+	//fprintf(stdout, "is RightLinear?: %s\n", IsRightLinear(&grammar) ? "True" : "False");
 
+	//6 punto
+	/*fprintf(stdout,"Inserire numero della produzione da eliminare : ");
+	scanf("%d",&choice);
+	DeleteProduction(&grammar,choice);
+	print_grammar(&grammar);*/
+
+	//print_grammar(load_grammar(stdin,&grammar));
 	system("PAUSE");
 	return 0;
 }

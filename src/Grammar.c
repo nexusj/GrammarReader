@@ -62,10 +62,10 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 	Symbol s;
 	Production* p = NULL;
 	
-
+	if(file != stdin)
 	g->numprod = 0; // Inizializza la grammatica
 
-	while ( !feof(file))
+	while ( !feof(file) )
 	{
 		s = read_sym(file);
 		if (feof(file)) break;
@@ -101,7 +101,8 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 				current_state = RIGHT;
 				
 				if (!CheckNonTerminal(p))
-					ErrorManager(NO_NT, p);
+					error = NO_NT;
+					//ErrorManager(NO_NT, p);
 			}
 			else
 			{
@@ -121,7 +122,7 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 			else if (is_prodsep(s))
 			{
 				current_state = START;
-				ErrorManager(error, p);
+				ErrorManager(error, p,g->numprod);
 				
 			}
 			break;
@@ -134,7 +135,7 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 
 	if (!CheckInitSymbol(g) )
 	{
-		ErrorManager(NO_INITSYM, NULL);
+		ErrorManager(NO_INITSYM, NULL,0);
 		g = NULL;
 	}
 	else if (error != -1)
