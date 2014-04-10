@@ -1,2 +1,3 @@
-S<bAa
-a>b
+S b,Aa
+&a>b
+B<cS
