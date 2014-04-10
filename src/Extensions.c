@@ -114,15 +114,17 @@ void ErrorManager(enum States _type, Production* p, int _line)
 		break;
 	case NO_PRODSYM:
 		print_word(&p->left);
-		fprintf(stdout,"[!] ");
-		print_word(&p->right);
 		fprintf(stdout, "ERROR : Missing production symbol in production (%d) \n",_line);
 		
+		break;
+	case INVALID_SYMBOL:
+		print_production(p);
+		fprintf(stdout, " ERROR : INVALID SYMBOL in production (%d) \n", _line);
+
 		break;
 	case INDEX_OUT_RANGE:
 		fprintf(stdout,"ERROR! Index out of range! \n");
 		break;
-	
 	}
 }
 
@@ -139,4 +141,14 @@ void DeleteProduction(Grammar* g,int _index)
 	}
 	
 }
+
+void DrawErrors(Errors _vector, Grammar* g)
+{
+	int i;
+
+	for (i = 0; i < _vector.size; i++)
+		ErrorManager(_vector.type[i], &g->productions[_vector.lines[i] - 1], _vector.lines[i]);
+
+}
+
 
