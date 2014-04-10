@@ -13,12 +13,19 @@
 #pragma region Structures
 typedef char Symbol;
 
-enum States { START, LEFT, RIGHT, NO_INITSYM, NO_NT, NO_PRODSYM, INDEX_OUT_RANGE};
+enum States { START, LEFT, RIGHT,NO_ERROR, NO_INITSYM, NO_NT, NO_PRODSYM, INDEX_OUT_RANGE, INVALID_SYMBOL, NO_PRODSYM_MAYBE};
 /*   START  = Scansione di una nuova produzione [F]
 LEFT   = Scansione della parte sinistra
 RIGHT  = Scansione della parte destra [F]
 ERROR  = Errore di scansione
 */
+#define  BUFFER_ERROR 250
+typedef struct
+{
+	enum States type[BUFFER_ERROR];
+	unsigned size;
+	unsigned lines[BUFFER_ERROR];
+}Errors;
 typedef struct
 {
 	Symbol word[MAX_WORD_LENGTH];

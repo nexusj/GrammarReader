@@ -58,10 +58,12 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 {
 	
 	enum States current_state = START;  // Stato iniziale
-	enum States error = -1;
+	//enum States error = -1;
 	Symbol s;
 	Production* p = NULL;
-	
+	Errors error;
+	error.size = 0;
+
 	if(file != stdin)
 	g->numprod = 0; // Inizializza la grammatica
 
@@ -87,8 +89,16 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 			{
 				current_state = START;
 			}
-			/*else
-				NO_NT*/
+			else if (ispunct(s) || isgraph(s))
+			{ 
+				current_state = LEFT;
+				p = add_new_production(g);
+				add_symbol(&p->left, s);
+				error.type[error.size] = INVALID_SYMBOL;
+				error.lines[error.size] = g->numprod;
+				error.size++;
+			}
+				
 			break;
 		case LEFT:
 			if (is_terminal(s) || is_nonterminal(s))
@@ -99,16 +109,43 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 			else if (is_prodsym(s))
 			{
 				current_state = RIGHT;
-				
+
 				if (!CheckNonTerminal(p))
-					error = NO_NT;
-					//ErrorManager(NO_NT, p);
+				{
+					error.type[error.size] = NO_NT;
+					error.lines[error.size] = g->numprod;
+					error.size++;
+					
+				}
+					
+				//ErrorManager(NO_NT, p);
+			}
+			else if (ispunct(s) || isgraph(s))
+			{
+				current_state = LEFT;
+
+				add_symbol(&p->left, s);
+				error.type[error.size] =  INVALID_SYMBOL;
+				error.lines[error.size] = g->numprod;
+				error.size++;
+			}
+				
+			
+ 			else if(is_prodsep(s))
+			{
+				error.type[error.size] = NO_PRODSYM;
+				error.lines[error.size] = g->numprod;
+				error.size++;
+				//ErrorManager(NO_PRODSYM_MAYBE, p, g->numprod);
+				current_state = START;
 			}
 			else
 			{
+
+				error.type[error.size] = NO_PRODSYM;
+				error.lines[error.size] = g->numprod;
+				error.size++;
 				
-				
-				error = NO_PRODSYM;
 				current_state = RIGHT;
 			}
 			break;
@@ -122,8 +159,17 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 			else if (is_prodsep(s))
 			{
 				current_state = START;
-				ErrorManager(error, p,g->numprod);
+				//ErrorManager(error, p,g->numprod);
 				
+			}
+			else if (ispunct(s) || isgraph(s))
+			{
+				current_state = RIGHT;
+
+				add_symbol(&p->right, s);
+				error.type[error.size] = INVALID_SYMBOL;
+				error.lines[error.size] = g->numprod;
+				error.size++;
 			}
 			break;
 		
@@ -133,13 +179,23 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 		
 	}
 
-	if (!CheckInitSymbol(g) )
+	if (error.size > 0)
+	{
+		DrawErrors(error, g);
+		if (!CheckInitSymbol(g))
+			ErrorManager(NO_INITSYM, NULL, 0);
+		
+		g = NULL;
+	}
+
+	if (g)
+	if (!CheckInitSymbol(g))
 	{
 		ErrorManager(NO_INITSYM, NULL,0);
 		g = NULL;
 	}
-	else if (error != -1)
-		g = NULL;
+
+		
 		
 
 		
