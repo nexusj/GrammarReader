@@ -13,36 +13,49 @@
 int main(int argc, char *argv[])
 {
 
-	char* filename = argv[1];
+	char* filename = malloc(30);
 	FILE* gram_file;
-	Grammar grammar;
-	int choice = 0;
+	Grammar grammar1,
+			grammar2,
+			grammar3;
+	
 	// controlla se è stato inserito il nome del file
 
-	if (filename == 0)
+	fprintf(stdout, "Inserire nome della prima grammatica : ");
+	gets(filename);
+	sprintf(filename, "%s.txt", filename);
+
+	LoadGrammar(filename, &grammar1, false);
+
+	fprintf(stdout, "Inserire nome della seconda grammatica : ");
+	gets(filename);
+	sprintf(filename, "%s.txt", filename);
+
+	LoadGrammar(filename, &grammar2, true);
+
+	grammar3 = JoinGrammar(&grammar1,&grammar2);
+
+	print_grammar(&grammar3);
+
+	
+	//JoinGrammar(&grammar1, &grammar2);
+	/* 
+	*Andava bene quando si caricava soltanto una grammatica
+	*/
+	/*if (filename == 0)
 	{
 		filename = malloc(25);
 		printf("nome file non specificato \n");
 		fprintf(stdout, "Inserire il nome del file: ");
 		scanf("%s", filename);
 		sprintf(filename, "%s.txt", filename);
-	}
+	}*/
 
+	
 	// apertura del file contenente la grammatica
 
-	gram_file = fopen(filename, "r");
-	if (gram_file == NULL)
-	{
-		fprintf(stderr, "Errore durante il caricamento della grammatica: %s \n", strerror(errno));
 	
-		system("PAUSE");
-		return -1;
-	}
-
-	print_grammar(load_grammar(gram_file, &grammar));
 	
-	fclose(gram_file);
-
 	//1 punto
 	//fprintf(stdout, "Are there NT in left production?: %s\n", CheckNonTerminal(&grammar.productions[0]) ? "True" : "False");
 

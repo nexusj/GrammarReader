@@ -49,6 +49,7 @@ typedef struct
 
 
 
+
 int is_terminal(Symbol s);
 int is_nonterminal(Symbol s);
 int is_prodsym(Symbol s);

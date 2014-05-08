@@ -1,5 +1,11 @@
 #include "Extensions.h"
 
+
+struct _Table NTTable =
+{
+	{ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' }, 0
+};
+
 int CheckNonTerminal(Production* p)
 {
 	int i,
@@ -150,5 +156,126 @@ void DrawErrors(Errors _vector, Grammar* g)
 		ErrorManager(_vector.type[i], &g->productions[_vector.lines[i] - 1], _vector.lines[i]);
 
 }
+
+int LoadGrammar(const char* _path, Grammar* g, bool _draw)
+{
+	FILE* gram_file = fopen(_path, "r");
+	if (gram_file == NULL)
+	{
+		fprintf(stderr, "Errore durante il caricamento della grammatica(%s): %s \n", _path,strerror(errno));
+		
+		
+		return -1;
+	}
+
+	load_grammar(gram_file, g);
+	if (_draw)
+	print_grammar(g);
+
+	fclose(gram_file);
+
+	return 0;
+}
+
+int AreDisjointed(Grammar* _g1, Grammar* _g2)
+{
+	int i,j,
+		_djointed = 1;
+
+	for (i = 0; i < _g1->numprod ; i++)
+	{
+		if ( _g1->productions[i].left.word[0] != INIT_SYMBOL)
+
+		{
+			if (CheckNonTerminal(&_g1->productions[i]))
+			{
+				for (j = 0; j < _g2->numprod; j++)
+				{
+					if (strcmp(_g1->productions[i].left.word, _g2->productions[j].left.word) == 0)
+					{
+						ChangeNT(_g2, _g2->productions[j].left.word);
+						
+					}
+						
+						//_djointed = 0;
+				}
+			 }
+			
+		}			
+	}
+	
+	return _djointed;
+}
+
+Grammar JoinGrammar(Grammar* _g1, Grammar* _g2)
+{
+	Grammar g;
+	int i;
+
+	AreDisjointed(_g1, _g2);
+
+	g.numprod = _g1->numprod + _g2->numprod;
+
+	
+
+	for (i = 0; i < _g1->numprod; i++)
+	{
+		strcpy(g.productions[i].left.word, _g1->productions[i].left.word);
+		g.productions[i].left.length = _g1->productions[i].left.length;
+
+		strcpy(g.productions[i].right.word, _g1->productions[i].right.word);
+		g.productions[i].right.length = _g1->productions[i].right.length;
+		
+	}
+
+
+	for (i = 0; i < _g2->numprod; i++)
+	{
+		strcpy(g.productions[i + (g.numprod - _g2->numprod)].left.word, _g2->productions[i].left.word);
+		g.productions[i + (g.numprod - _g2->numprod)].left.length = _g2->productions[i].left.length;
+
+		strcpy(g.productions[i + (g.numprod - _g2->numprod)].right.word, _g2->productions[i].right.word);
+		g.productions[i + (g.numprod - _g2->numprod)].right.length = _g2->productions[i].right.length;
+
+	}
+	
+	return g;
+}
+
+void ChangeNT(Grammar* g, const char* _s)
+{
+	
+	int i;
+	char* _tmp;
+
+	if (strcmp(_s,&NTTable.buffer[NTTable.offset]))
+		NTTable.offset++;
+
+	for (i = 0; i < g->numprod; i++)
+	{
+		
+
+		
+		if (strcmp(_s, g->productions[i].left.word) == 0)
+		{
+			_tmp = strstr(g->productions[i].left.word, _s);
+			strcpy(_tmp,&NTTable.buffer[NTTable.offset]);
+		}
+
+		_tmp = strchr(g->productions[i].right.word,_s[0]);
+
+		if (_tmp)
+	     strncpy(_tmp, &NTTable.buffer[NTTable.offset], 1);
+	
+			
+	}
+
+}
+
+
+
+
+
+
 
 
