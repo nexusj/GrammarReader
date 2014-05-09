@@ -19,13 +19,15 @@ int main(int argc, char *argv[])
 			grammar2,
 			grammar3;
 	
+	
 	// controlla se è stato inserito il nome del file
+	
 
 	fprintf(stdout, "Inserire nome della prima grammatica : ");
 	gets(filename);
 	sprintf(filename, "%s.txt", filename);
 
-	LoadGrammar(filename, &grammar1, false);
+	LoadGrammar(filename, &grammar1, true);
 
 	fprintf(stdout, "Inserire nome della seconda grammatica : ");
 	gets(filename);
@@ -33,8 +35,9 @@ int main(int argc, char *argv[])
 
 	LoadGrammar(filename, &grammar2, true);
 
-	grammar3 = JoinGrammar(&grammar1,&grammar2);
-
+	
+	//grammar3 = JoinGrammar(&grammar1,&grammar2);
+	grammar3 = ConcatenateGrammar(&grammar1, &grammar2);
 	print_grammar(&grammar3);
 
 	

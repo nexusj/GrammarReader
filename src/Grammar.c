@@ -159,6 +159,8 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 			else if (is_prodsep(s))
 			{
 				current_state = START;
+				g->productions[g->numprod-1].left.word[g->productions[g->numprod-1].left.length] = '\0';
+				g->productions[g->numprod - 1].right.word[g->productions[g->numprod - 1].right.length] = '\0';
 				//ErrorManager(error, p,g->numprod);
 				
 			}
