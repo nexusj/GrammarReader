@@ -29,16 +29,18 @@ int main(int argc, char *argv[])
 
 	LoadGrammar(filename, &grammar1, true);
 
-	fprintf(stdout, "Inserire nome della seconda grammatica : ");
+	//print_grammar(IterateGrammar(&grammar1, &grammar3));
+	//fprintf(stdout, "Is CS? : %s\n", GrammarCS(&grammar1) ? "True" : "False");
+	/*fprintf(stdout, "Inserire nome della seconda grammatica : ");
 	gets(filename);
 	sprintf(filename, "%s.txt", filename);
 
-	LoadGrammar(filename, &grammar2, true);
+	LoadGrammar(filename, &grammar2, true);*/
 
 	
-	//grammar3 = JoinGrammar(&grammar1,&grammar2);
-	grammar3 = ConcatenateGrammar(&grammar1, &grammar2);
-	print_grammar(&grammar3);
+	 //JoinGrammar(&grammar1,&grammar2,&grammar3);
+	print_grammar( ConvertToCS(&grammar1,&grammar3));
+
 
 	
 	//JoinGrammar(&grammar1, &grammar2);

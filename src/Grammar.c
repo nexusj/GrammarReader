@@ -70,7 +70,7 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 	while ( !feof(file) )
 	{
 		s = read_sym(file);
-		if (feof(file)) break;
+		
 		
 		switch (current_state)
 		{
@@ -110,13 +110,7 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 			{
 				current_state = RIGHT;
 
-				if (!CheckNonTerminal(p))
-				{
-					error.type[error.size] = NO_NT;
-					error.lines[error.size] = g->numprod;
-					error.size++;
-					
-				}
+				
 					
 				//ErrorManager(NO_NT, p);
 			}
@@ -131,13 +125,21 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 			}
 				
 			
- 			else if(is_prodsep(s))
+ 			else if(is_prodsep(s) || s == EOF)
 			{
 				error.type[error.size] = NO_PRODSYM;
 				error.lines[error.size] = g->numprod;
 				error.size++;
 				//ErrorManager(NO_PRODSYM_MAYBE, p, g->numprod);
 				current_state = START;
+
+				if (!CheckNonTerminal(p))
+				{
+					error.type[error.size] = NO_NT;
+					error.lines[error.size] = g->numprod;
+					error.size++;
+
+				}
 			}
 			else
 			{
@@ -156,7 +158,7 @@ Grammar* load_grammar(FILE* file, Grammar* g)
 				current_state = RIGHT;
 				add_symbol(&p->right, s);
 			}
-			else if (is_prodsep(s))
+			else if (is_prodsep(s) || s == EOF)
 			{
 				current_state = START;
 				g->productions[g->numprod-1].left.word[g->productions[g->numprod-1].left.length] = '\0';

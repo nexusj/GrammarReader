@@ -1,5 +1,3 @@
-S>bAa
-A>b
-C>d
-
+ABC>bcdef
+S>A
 

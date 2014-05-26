@@ -3,7 +3,7 @@
 
 struct _Table NTTable =
 {
-	{ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'},BUFFER_TABLE_SIZE, 0
+	{ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'},BUFFER_TABLE_SIZE
 };
 
 int CheckNonTerminal(Production* p)
@@ -38,7 +38,7 @@ int CheckInitSymbol(Grammar* g)
 
 	for (i = 0; i < g->numprod && !_existInitS; i++)
 	{
-		if (g->productions[i].left.length == 1 && g->productions->left.word[0] == INIT_SYMBOL[0])
+		if (g->productions[i].left.length == 1 && g->productions[i].left.word[0] == INIT_SYMBOL[0])
 		{
 			_existInitS = 1;
 		}
@@ -60,6 +60,49 @@ int GrammarCF(Grammar* g)
 
 	return _isCF;
 }
+
+int GrammarCS(Grammar* g)
+{
+	int i,
+		j = 0,
+		_isCS = 1,
+		contextleft = 0,
+		contextright = 0;
+
+	for (i = 0; i < g->numprod && _isCS; i++)
+	{
+		while (j < g->productions[i].left.length && g->productions[i].left.word[j] == g->productions[i].right.word[j])
+		{
+			contextleft++;
+			j++;
+		}
+
+		j = g->productions[i].left.length - 1;
+		while (j > 0 && g->productions[i].left.word[j] == g->productions[i].right.word[j])
+		{
+			contextright++;
+			j--;
+		}
+
+		j = 0;
+
+		if (g->productions[i].left.length == (contextleft + contextright + 1))
+		{
+			if ((contextleft + contextright) < g->productions[i].right.length)
+				_isCS = 1;
+
+			if (g->productions[i].right.length == 0 && g->productions[i].left.word[0] != INIT_SYMBOL[0])
+				_isCS = 0;
+			else
+				_isCS = 1;
+		}
+		else
+			_isCS = 0;
+	}
+	
+	return _isCS;
+}
+
 
 int IsMonotonic(Grammar* g)
 {
@@ -168,7 +211,7 @@ int LoadGrammar(const char* _path, Grammar* g, bool _draw)
 		return -1;
 	}
 
-	load_grammar(gram_file, g);
+	g = load_grammar(gram_file, g);
 	if (_draw)
 	print_grammar(g);
 
@@ -206,39 +249,42 @@ void CheckCommonNT(Grammar* _g1, Grammar* _g2)
 	
 }
 
-Grammar JoinGrammar(Grammar* _g1, Grammar* _g2)
+Grammar* JoinGrammar(Grammar* _g1, Grammar* _g2,Grammar* _g)
 {
-	Grammar g;
+	
+	
 	int i;
 
+	
 	CheckCommonNT(_g1, _g2);
-
-	g.numprod = _g1->numprod + _g2->numprod;
 
 	
 
+	_g->numprod = _g1->numprod + _g2->numprod;
+
 	for (i = 0; i < _g1->numprod; i++)
 	{
-		strcpy(g.productions[i].left.word, _g1->productions[i].left.word);
-		g.productions[i].left.length = _g1->productions[i].left.length;
+		strcpy(_g->productions[i].left.word, _g1->productions[i].left.word);
+		_g->productions[i].left.length = _g1->productions[i].left.length;
 
-		strcpy(g.productions[i].right.word, _g1->productions[i].right.word);
-		g.productions[i].right.length = _g1->productions[i].right.length;
+		strcpy(_g->productions[i].right.word, _g1->productions[i].right.word);
+		_g->productions[i].right.length = _g1->productions[i].right.length;
 		
 	}
 
 
 	for (i = 0; i < _g2->numprod; i++)
 	{
-		strcpy(g.productions[i + (g.numprod - _g2->numprod)].left.word, _g2->productions[i].left.word);
-		g.productions[i + (g.numprod - _g2->numprod)].left.length = _g2->productions[i].left.length;
+		strcpy(_g->productions[i + (_g->numprod - _g2->numprod)].left.word, _g2->productions[i].left.word);
+		_g->productions[i + (_g->numprod - _g2->numprod)].left.length = _g2->productions[i].left.length;
 
-		strcpy(g.productions[i + (g.numprod - _g2->numprod)].right.word, _g2->productions[i].right.word);
-		g.productions[i + (g.numprod - _g2->numprod)].right.length = _g2->productions[i].right.length;
+		strcpy(_g->productions[i + (_g->numprod - _g2->numprod)].right.word, _g2->productions[i].right.word);
+		_g->productions[i + (_g->numprod - _g2->numprod)].right.length = _g2->productions[i].right.length;
 
 	}
+
 	
-	return g;
+	return _g;
 }
 
 void ChangeNT(Grammar* g, const char* _s)
@@ -261,7 +307,7 @@ void ChangeNT(Grammar* g, const char* _s)
 				strncpy(_tmp, &NTTable.buffer[0],1);
 			else
 			{
-				sprintf(_cnv, "%d", ++NTTable.offset);
+				sprintf(_cnv, "%d", ++offset);
 				strcat(_tmp, _cnv);
 				//strcpy(_tmp, &NTTable.buffer[BUFFER_TABLE_SIZE - NTTable.offset]);
 				g->productions[i].left.length++;
@@ -279,7 +325,7 @@ void ChangeNT(Grammar* g, const char* _s)
 				strncpy(_tmp, &NTTable.buffer[0],1);
 			else
 			{
-				sprintf(_cnv, "%d", NTTable.offset);
+				sprintf(_cnv, "%d", offset);
 				strcat(_tmp, _cnv);
 				g->productions[i].right.length++;
 			}
@@ -293,12 +339,12 @@ void ChangeNT(Grammar* g, const char* _s)
 
 }
 
-Grammar ConcatenateGrammar(Grammar* _g1, Grammar* _g2)
+Grammar* ConcatenateGrammar(Grammar* _g1, Grammar* _g2,Grammar* _g)
 {
-	Grammar g;
+	
 	int i;
 
-	
+	offset = 0;
 
 	if (GrammarCF(_g1) && GrammarCF(_g2))
 	{
@@ -307,21 +353,72 @@ Grammar ConcatenateGrammar(Grammar* _g1, Grammar* _g2)
 		ChangeNT(_g1,INIT_SYMBOL);
 		ChangeNT(_g2, INIT_SYMBOL);
 
-		g = JoinGrammar(_g1, _g2);
+		JoinGrammar(_g1, _g2,_g);
 		
-		ShiftRVectorP(&g, 0);
-		strcpy(g.productions[0].left.word, "S");
-		g.productions[0].left.length = 1;
-		strcpy(g.productions[0].right.word, "S1S2");
-		g.productions[0].right.length = strlen("S1S2");
-		//ChangeNT()
+		/*ShiftRVectorP(_g, 0);
+		strcpy(_g->productions[0].left.word, "S");
+		_g->productions[0].left.length = 1;
+		strcpy(_g->productions[0].right.word, "S1S2");
+		_g->productions[0].right.length = strlen("S1S2");*/
+
+		AddProduction(_g, INIT_SYMBOL, "S1S2", 0);
 
 
 	}
 
-	return g;
+	return _g;
 }
 
+Grammar* IterateGrammar(Grammar* _g1, Grammar* _g)
+{
+	int i,
+		j;
+
+	offset = 0;
+	
+
+	if (GrammarCF(_g1))
+	{
+		ChangeNT(_g1, INIT_SYMBOL);
+
+		
+		_g->numprod = _g1->numprod ;
+
+		for (i = 0; i < _g1->numprod; i++)
+		{
+			strcpy(_g->productions[i].left.word, _g1->productions[i].left.word);
+			_g->productions[i].left.length = _g1->productions[i].left.length;
+
+			strcpy(_g->productions[i].right.word, _g1->productions[i].right.word);
+			_g->productions[i].right.length = _g1->productions[i].right.length;
+
+		}
+		
+		
+		AddProduction(_g, INIT_SYMBOL, "S1S", 0);
+		AddProduction(_g, INIT_SYMBOL, NULL, 0);
+		
+		
+	/*	ShiftRVectorP(_g, 0);
+		strcpy(_g->productions[0].left.word, "S");
+		_g->productions[0].left.length = 1;
+		strcpy(_g->productions[0].right.word, "S1S");
+		_g->productions[0].right.length = strlen("S1S");
+
+
+		ShiftRVectorP(_g, 1);
+		strcpy(_g->productions[0].left.word, "S");
+		_g->productions[0].left.length = 1;
+		_g->productions[0].right.word[0] = NULL;
+		_g->productions[0].right.length = 0;*/
+	}
+	
+	
+
+	
+	return _g;
+
+}
 void ShifLVectorCh(char* _vector, int _index,int* _lenght)
 {
 	int i;
@@ -346,19 +443,133 @@ void ShiftRVectorP(Grammar* g, int _index)
 
 void AdjustTableNT(struct _Table* _table, Grammar* _g)
 {
-	int i;
+	int i, j;
 
-	char *_tmp;
+	char *_tmp = NULL;
 
 	for (i = 0; i < _g->numprod; i++)
 	{
-		_tmp = strchr(_table->buffer, _g->productions[i].left.word[0]);
+		for (j = 0; j < strlen(_g->productions[i].left.word); j++)
+		{
+			_tmp = strchr(_table->buffer, _g->productions[i].left.word[j]);
 
-		if (_tmp)
-			ShifLVectorCh(_table->buffer, _tmp - _table->buffer, &_table->lenght);
+			if (_tmp)
+			{
+
+				ShifLVectorCh(_table->buffer, _tmp - _table->buffer, &_table->length);
+
+				
+
+			}
+		}
+		
+//		_tmp = strchr(_table->buffer, _g->productions[i].left.word);
+
+		
+			
 	}
 	
 }
+
+void AddProduction(Grammar* g, char* _left, char* _right, int _index)
+{
+	ShiftRVectorP(g, _index+1);
+	if (_left)
+	{
+		strcpy(g->productions[_index].left.word, _left);
+		g->productions[_index].left.length = strlen(_left);
+	}
+	else
+		g->productions[_index].left.length = 0;
+	
+	if (_right)
+	{
+		strcpy(g->productions[_index].right.word, _right);
+		g->productions[_index].right.length = strlen(_right);
+	}
+	else
+	{
+		g->productions[_index].right.word[0] = '\0';
+		g->productions[_index].right.length = 0;
+	}
+		
+	g->numprod++;
+}
+
+Grammar* ConvertToCS(Grammar* _g1, Grammar* _g)
+{
+	int i, j;
+	
+
+	if (IsMonotonic(_g1))
+	{
+
+		_g->numprod = 0;
+		AdjustTableNT(&NTTable, _g1);
+
+		for (i = 0; i < _g1->numprod; i++)
+		{
+			if (_g1->productions[i].left.word[0] != INIT_SYMBOL[0])
+			{
+				strcpy(_g->productions[i].left.word, _g1->productions[i].left.word);
+				_g->productions[i].left.length = _g1->productions[i].left.length;
+
+				strcpy(_g->productions[i].right.word, _g->productions[i].left.word);
+				_g->productions[i].right.length = _g->productions[i].left.length;
+				
+				_g->numprod++;
+
+
+				for (j = 1; j <(2 * _g1->productions[i].left.length)+1; j++)
+				{
+
+					if (j > _g1->productions[i].left.length)
+					{
+						strcpy((_g->productions[j - 1].right.word + strlen(_g->productions[i].right.word) - (j - _g1->productions[i].left.length)), (_g1->productions[i].right.word + strlen(_g1->productions[i].right.word) - (j - 1)));
+					}
+					else if (j == _g1->productions[i].left.length)
+					{
+						_g->productions[j - 1].right.word[j - 1] = NTTable.buffer[0];
+						strcat(_g->productions[j - 1].right.word, (_g1->productions[i].right.word + strlen(_g1->productions[i].right.word) - (j - 1)));
+						_g->productions[j - 1].right.length = strlen(_g->productions[j - 1].right.word);
+					}
+					else
+						_g->productions[j - 1].right.word[j - 1] = NTTable.buffer[0];
+
+					if (strcmp(_g->productions[j-1].right.word, _g1->productions[i].right.word) != 0)
+					{
+
+
+						strcpy(_g->productions[j].left.word, _g->productions[j - 1].right.word);
+						strcpy(_g->productions[j].right.word, _g->productions[j].left.word);
+
+						_g->productions[j].left.length = strlen(_g->productions[j].left.word);
+						_g->productions[j].right.length = strlen(_g->productions[j].right.word);
+						_g->numprod++;
+
+						AdjustTableNT(&NTTable, _g);
+					}
+				}
+
+			}
+		}
+	}
+	else
+		_g = NULL;
+
+	return _g;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
