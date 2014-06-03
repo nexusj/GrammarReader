@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GrammarReader", "GrammarReader.vcxproj", "{4E6F2B49-998B-4809-8D14-B48A68193ABC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PascalLexer", "..\PascalLexer\PascalLexer.vcxproj", "{1FC45C07-D9B8-41BC-85AC-85CDFE8D3711}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{4E6F2B49-998B-4809-8D14-B48A68193ABC}.Debug|Win32.Build.0 = Debug|Win32
 		{4E6F2B49-998B-4809-8D14-B48A68193ABC}.Release|Win32.ActiveCfg = Release|Win32
 		{4E6F2B49-998B-4809-8D14-B48A68193ABC}.Release|Win32.Build.0 = Release|Win32
+		{1FC45C07-D9B8-41BC-85AC-85CDFE8D3711}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1FC45C07-D9B8-41BC-85AC-85CDFE8D3711}.Debug|Win32.Build.0 = Debug|Win32
+		{1FC45C07-D9B8-41BC-85AC-85CDFE8D3711}.Release|Win32.ActiveCfg = Release|Win32
+		{1FC45C07-D9B8-41BC-85AC-85CDFE8D3711}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
