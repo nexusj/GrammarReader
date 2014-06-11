@@ -498,7 +498,7 @@ void AddProduction(Grammar* g, char* _left, char* _right, int _index)
 
 Grammar* ConvertToCS(Grammar* _g1, Grammar* _g)
 {
-	int i, j;
+	int i, j, diff = 0;
 	
 
 	if (IsMonotonic(_g1))
@@ -519,18 +519,20 @@ Grammar* ConvertToCS(Grammar* _g1, Grammar* _g)
 				
 				_g->numprod++;
 
+				diff = (_g1->productions[i].right.length - _g1->productions[i].left.length);
 
 				for (j = 1; j <(2 * _g1->productions[i].left.length)+1; j++)
 				{
 
 					if (j > _g1->productions[i].left.length)
 					{
-						strcpy((_g->productions[j - 1].right.word + strlen(_g->productions[i].right.word) - (j - _g1->productions[i].left.length)), (_g1->productions[i].right.word + strlen(_g1->productions[i].right.word) - (j - 1)));
+						
+						strcpy((_g->productions[j - 1].right.word + strlen(_g->productions[i].right.word) - (j - _g1->productions[i].left.length)), (_g1->productions[i].right.word + strlen(_g1->productions[i].right.word) - diff++));
 					}
 					else if (j == _g1->productions[i].left.length)
 					{
 						_g->productions[j - 1].right.word[j - 1] = NTTable.buffer[0];
-						strcat(_g->productions[j - 1].right.word, (_g1->productions[i].right.word + strlen(_g1->productions[i].right.word) - (j - 1)));
+						strcat(_g->productions[j - 1].right.word, (_g1->productions[i].right.word + strlen(_g1->productions[i].right.word) - diff++));
 						_g->productions[j - 1].right.length = strlen(_g->productions[j - 1].right.word);
 					}
 					else

@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GrammarReader", "GrammarRea
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PascalLexer", "..\PascalLexer\PascalLexer.vcxproj", "{1FC45C07-D9B8-41BC-85AC-85CDFE8D3711}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CLexer", "..\CLexer\CLexer.vcxproj", "{B5FD9531-92A8-4678-BD01-8292410B5833}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -21,6 +23,10 @@ Global
 		{1FC45C07-D9B8-41BC-85AC-85CDFE8D3711}.Debug|Win32.Build.0 = Debug|Win32
 		{1FC45C07-D9B8-41BC-85AC-85CDFE8D3711}.Release|Win32.ActiveCfg = Release|Win32
 		{1FC45C07-D9B8-41BC-85AC-85CDFE8D3711}.Release|Win32.Build.0 = Release|Win32
+		{B5FD9531-92A8-4678-BD01-8292410B5833}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B5FD9531-92A8-4678-BD01-8292410B5833}.Debug|Win32.Build.0 = Debug|Win32
+		{B5FD9531-92A8-4678-BD01-8292410B5833}.Release|Win32.ActiveCfg = Release|Win32
+		{B5FD9531-92A8-4678-BD01-8292410B5833}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
