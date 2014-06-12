@@ -14,7 +14,7 @@
 (*12*)       peso := 76.12 ;
 (*13*)       altezza := 178.;
 (*14*)       contatore := contatore + 1;
-			hex := $4F;
+			hex := $4F$;
 			pi := 31.14E12;
 (*15*)     END;
 (*16*)   REPEAT (* 1°ciclo *)

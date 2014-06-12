@@ -9,6 +9,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PascalLexer", "..\PascalLex
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CLexer", "..\CLexer\CLexer.vcxproj", "{B5FD9531-92A8-4678-BD01-8292410B5833}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DFA", "..\DFA\DFA.vcxproj", "{9E155F70-5324-4E57-84E6-D0FB4160557E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DateDFA", "..\DateDFA\DateDFA.vcxproj", "{5CA7582E-5C42-4CB0-8325-DF5C9CA2F8FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -27,6 +31,14 @@ Global
 		{B5FD9531-92A8-4678-BD01-8292410B5833}.Debug|Win32.Build.0 = Debug|Win32
 		{B5FD9531-92A8-4678-BD01-8292410B5833}.Release|Win32.ActiveCfg = Release|Win32
 		{B5FD9531-92A8-4678-BD01-8292410B5833}.Release|Win32.Build.0 = Release|Win32
+		{9E155F70-5324-4E57-84E6-D0FB4160557E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9E155F70-5324-4E57-84E6-D0FB4160557E}.Debug|Win32.Build.0 = Debug|Win32
+		{9E155F70-5324-4E57-84E6-D0FB4160557E}.Release|Win32.ActiveCfg = Release|Win32
+		{9E155F70-5324-4E57-84E6-D0FB4160557E}.Release|Win32.Build.0 = Release|Win32
+		{5CA7582E-5C42-4CB0-8325-DF5C9CA2F8FC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5CA7582E-5C42-4CB0-8325-DF5C9CA2F8FC}.Debug|Win32.Build.0 = Debug|Win32
+		{5CA7582E-5C42-4CB0-8325-DF5C9CA2F8FC}.Release|Win32.ActiveCfg = Release|Win32
+		{5CA7582E-5C42-4CB0-8325-DF5C9CA2F8FC}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
