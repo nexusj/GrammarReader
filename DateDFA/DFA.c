@@ -2,7 +2,7 @@
 
 int scan(char* s)
 {
-	enum { S, A, B, C, D, E, G, H, I, K, POZZA } currentState = S;
+	enum { S, A, B, C, D, E, G, H, I, L, K, POZZA } currentState = S;
 	int i = 0,
 		_state = 0;
 
@@ -11,8 +11,10 @@ int scan(char* s)
 		switch (currentState)
 		{
 		case S:
-			if (s[i] >= '0' && s[i] <= '2')
+			if (s[i] >= '0' && s[i] <= '1')
 				currentState = A;
+			else if (s[i] == '2')
+				currentState = B;
 			else if (s[i] >= '3' && s[i] <= '9')
 				currentState = K;
 			else
@@ -22,8 +24,8 @@ int scan(char* s)
 			}	
 			break;
 		case A:
-			if ((s[i - 1] <= '2' && s[i] < '4') || (s[i - 1] < '2' && s[i] <= '9'))
-					currentState = B;
+			if ((s[i ] >= '0' && s[i] <= '9'))
+					currentState = C;
 			else
 			{
 				_state = 2;
@@ -31,7 +33,7 @@ int scan(char* s)
 			}
 			break;
 		case B:
-			if (s[i] == ':')
+			if ((s[i] >= '0' && s[i] <= '3'))
 				currentState = C;
 			else
 			{
@@ -40,7 +42,7 @@ int scan(char* s)
 			}
 			break;
 		case C:
-			if (s[i] >= '0' && s[i] <= '5')
+			if (s[i] == ':')
 				currentState = D;
 			else
 			{
@@ -49,7 +51,7 @@ int scan(char* s)
 			}
 			break;
 		case D:
-			if (s[i] >= '0' && s[i] <= '9')
+			if (s[i] >= '0' && s[i] <= '5')
 				currentState = E;
 			else
 			{
@@ -58,7 +60,7 @@ int scan(char* s)
 			}
 			break;
 		case E:
-			if (s[i] == ':')
+			if (s[i] >= '0' && s[i] <= '9')
 				currentState = H;
 			else
 			{
@@ -67,7 +69,7 @@ int scan(char* s)
 			}
 			break;
 		case H:
-			if (s[i] >= '0' && s[i] <= '5')
+			if (s[i] == ':')
 				currentState = G;
 			else
 			{
@@ -76,7 +78,7 @@ int scan(char* s)
 			}
 			break;
 		case G:
-			if (s[i] >= '0' && s[i] <= '9')
+			if (s[i] >= '0' && s[i] <= '5')
 				currentState = I;
 			else
 			{
@@ -85,6 +87,15 @@ int scan(char* s)
 			}
 			break;
 		case I:
+			if (s[i] >= '0' && s[i] <= '9')
+				currentState = L;
+			else
+			{
+				_state = 2;
+				currentState = POZZA;
+			}
+			break;
+		case L:
 			if (!isalnum(s[i]))
 				_state = 0;
 			else
@@ -101,7 +112,7 @@ int scan(char* s)
 		++i;
 	}
 
-	if (currentState != I && _state == 0)
+	if (currentState != L && _state == 0)
 		_state = 1;
 
 	return _state;

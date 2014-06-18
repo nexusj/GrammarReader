@@ -521,38 +521,48 @@ Grammar* ConvertToCS(Grammar* _g1, Grammar* _g)
 
 				diff = (_g1->productions[i].right.length - _g1->productions[i].left.length);
 
-				for (j = 1; j <(2 * _g1->productions[i].left.length)+1; j++)
+				for (j = 1; j <(2 * _g1->productions[i].left.length) + 1; j++)
 				{
 
 					if (j > _g1->productions[i].left.length)
 					{
 						
-						strcpy((_g->productions[j - 1].right.word + strlen(_g->productions[i].right.word) - (j - _g1->productions[i].left.length)), (_g1->productions[i].right.word + strlen(_g1->productions[i].right.word) - diff++));
+						strcpy((_g->productions[_g->numprod - 1].right.word + strlen(_g->productions[i].right.word) - (j - _g1->productions[i].left.length)), (_g1->productions[i].right.word + strlen(_g1->productions[i].right.word) - diff++));
 					}
 					else if (j == _g1->productions[i].left.length)
 					{
-						_g->productions[j - 1].right.word[j - 1] = NTTable.buffer[0];
-						strcat(_g->productions[j - 1].right.word, (_g1->productions[i].right.word + strlen(_g1->productions[i].right.word) - diff++));
-						_g->productions[j - 1].right.length = strlen(_g->productions[j - 1].right.word);
+						_g->productions[_g->numprod - 1].right.word[j - 1] = NTTable.buffer[0];
+						strcat(_g->productions[_g->numprod - 1].right.word, (_g1->productions[i].right.word + strlen(_g1->productions[i].right.word) - diff++));
+						_g->productions[_g->numprod - 1].right.length = strlen(_g->productions[_g->numprod - 1].right.word);
 					}
 					else
-						_g->productions[j - 1].right.word[j - 1] = NTTable.buffer[0];
+						_g->productions[_g->numprod -1 ].right.word[j - 1] = NTTable.buffer[0];
 
-					if (strcmp(_g->productions[j-1].right.word, _g1->productions[i].right.word) != 0)
+					if (strcmp(_g->productions[_g->numprod - 1].right.word, _g1->productions[i].right.word) != 0)
 					{
 
 
-						strcpy(_g->productions[j].left.word, _g->productions[j - 1].right.word);
-						strcpy(_g->productions[j].right.word, _g->productions[j].left.word);
+						strcpy(_g->productions[_g->numprod].left.word, _g->productions[_g->numprod - 1].right.word);
+						strcpy(_g->productions[_g->numprod].right.word, _g->productions[_g->numprod].left.word);
 
-						_g->productions[j].left.length = strlen(_g->productions[j].left.word);
-						_g->productions[j].right.length = strlen(_g->productions[j].right.word);
+						_g->productions[_g->numprod].left.length = strlen(_g->productions[_g->numprod - 1].right.word);
+						_g->productions[_g->numprod].right.length = strlen(_g->productions[_g->numprod].left.word);
 						_g->numprod++;
 
 						AdjustTableNT(&NTTable, _g);
 					}
 				}
 
+			}
+			else
+			{
+				strcpy(_g->productions[_g->numprod].left.word, _g1->productions[i].left.word);
+				_g->productions[_g->numprod].left.length = _g1->productions[i].left.length;
+
+				strcpy(_g->productions[_g->numprod].right.word, _g1->productions[i].right.word);
+				_g->productions[_g->numprod].right.length = _g1->productions[i].right.length;
+
+				_g->numprod++;
 			}
 		}
 	}
