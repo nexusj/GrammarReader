@@ -37,7 +37,6 @@ int getToken(FILE* src, Token* tkn)
 		NUM,            /* Numero intero,virgola mobile(singola/doppia precisione)*/
 		NUM_R,          /* Numero reale */
 		IN_STR,         /* Stringa*/
-		PLUS_INC,		/* Più o incremento*/
 		NOT_EQ			/* Non uguale*/
 		
 	} currentState = S;
@@ -76,9 +75,6 @@ int getToken(FILE* src, Token* tkn)
 				else switch (c)
 				{
 					case '+':
-						currentState = PLUS_INC;
-						tkn->value[i++] = c;
-						break;
 						tkn->type = PLUS;
 						tkn->value[i++] = c;
 						eot = 1;
@@ -117,7 +113,6 @@ int getToken(FILE* src, Token* tkn)
 						eot = 1;
 						break;
 					case '(' :
-						//currentState = BRACKET;
 						tkn->type = LEFT_PAR;
 						tkn->value[i++] = c;
 						eot = 1;
@@ -128,7 +123,6 @@ int getToken(FILE* src, Token* tkn)
 						eot = 1;
 						break;
 					case '[':
-						//currentState = BRACKET;
 						tkn->type = LEFT_PAR;
 						tkn->value[i++] = c;
 						eot = 1;
@@ -183,19 +177,6 @@ int getToken(FILE* src, Token* tkn)
 					eot = 1;
 				}
 				break;
-			/*case BRACKET:
-				if (c == ')')
-				{
-					currentState = START_COM;
-					i--;
-				}
-				else
-				{
-					lookahead = 1;
-					eot = 1;
-					tkn->type = LEFT_PAR;
-				}
-				break;*/
 			case START_COM:
 				if (c == '/' || c == '\n')
 					currentState = S;
@@ -296,14 +277,6 @@ int getToken(FILE* src, Token* tkn)
 				{
 					eot = lookahead = 1;
 					tkn->type = SLASH;
-				}
-				break;
-			case PLUS_INC:
-				if (c == '+')
-				{
-					tkn->type = INC;
-					tkn->value[i++] = c;
-					eot = 1;
 				}
 				break;
 			case NOT_EQ:

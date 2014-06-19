@@ -1,3 +1,15 @@
+/********************************************************************
+	created:	2014/06/19
+	created:	19:6:2014   12:35
+	filename: 	C:\Users\NexusJ\Documents\GitHub\GrammarReader\DateDFA\main.c
+	file path:	C:\Users\NexusJ\Documents\GitHub\GrammarReader\DateDFA
+	file base:	main
+	file ext:	c
+	author:		Vito Palumbo (aka NexusJ)
+	
+	purpose:	Questo progetto fornisce un automa a stati finiti deterministico,il quale riconosce l'ora nel formato 24 ore.
+*********************************************************************/
+
 #include "DFA.h"
 
 int main(int argc, char* argv[])

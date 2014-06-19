@@ -1,10 +1,29 @@
+/********************************************************************
+	created:	2014/06/19
+	created:	19:6:2014   12:28
+	filename: 	C:\Users\NexusJ\Documents\GitHub\GrammarReader\src\Extensions.h
+	file path:	C:\Users\NexusJ\Documents\GitHub\GrammarReader\src
+	file base:	Extensions
+	file ext:	h
+	author:		Vito Palumbo (aka NexusJ)
+	
+	purpose:	Questo è un progetto universitario per l'esame di teoria dei linguaggi formali. 
+				Esso fornisce un GrammarReader con le seguenti caratteristiche:
+				-Verificare a quale gerarchia di Chomsky appartiene la grammatica;
+				-Unire,concatenare e iterare le grammatiche;
+				-Convertire le produzioni da monotone a CS;
+				-ErrorManager (ti mostra gli errori contenuti in ogni produzione);
+				-Controllo dell'esistenza dell'init symbol e dei NT nella parte sinistra
+*********************************************************************/
+
+
 #ifndef _EXTENSIONS_H_
 #define  _EXTENSIONS_H_
 
 /* Controlla se si sta usando VISUAL STUDIO.
 In caso positivo si disattivano i warning riguardo alcune funzioni deprecate(printf,scanf,..) */
 #ifdef _MSC_VER
-#define _CRT_SECURE_NO_WARNINGS 1
+#define _CRT_SECURE_NO_WARNINGS 
 #endif
 
 #include <stdlib.h>

@@ -16,19 +16,31 @@
 #pragma region Structures
 typedef char Symbol;
 
-enum States { START, LEFT, RIGHT,NO_ERROR, NO_INITSYM, NO_NT, NO_PRODSYM, INDEX_OUT_RANGE, INVALID_SYMBOL, NO_PRODSYM_MAYBE};
+enum States { START, LEFT, RIGHT,NO_ERROR, NO_INITSYM, NO_NT, NO_PRODSYM, INDEX_OUT_RANGE, INVALID_SYMBOL,NO_CONCT,NO_ITER,NO_TRANSF};
 /*   START  = Scansione di una nuova produzione [F]
 LEFT   = Scansione della parte sinistra
 RIGHT  = Scansione della parte destra [F]
-ERROR  = Errore di scansione
+NO_ERROR = Nessun errore rilevato
+NO_INITSYM = Nessun simbolo iniziale 
+NO_NT = Nessun NT
+NO_PRODSYM = Nessun simbolo di produzione
+INDEX_OUT_RANGE = Indice fuori dall'intervallo consentito
+INVALID_SYMBOL = Simbolo non valido
+NO_CONCT = Concatenazione fallita
+NO_ITER = Iterazione fallita
+NO_TRANSF = Trasformazione da monotona a CS fallita
 */
+
+
+/* Grandezza massima del buffer che conterrà i tipi di errori rilevati */
 #define  BUFFER_ERROR 250
 typedef struct
 {
-	enum States type[BUFFER_ERROR];
-	unsigned size;
-	unsigned lines[BUFFER_ERROR];
+	enum States type[BUFFER_ERROR]; //Buffer che contiene i tipi di errori rilevati
+	unsigned size;					//Grandezza del buffer
+	unsigned lines[BUFFER_ERROR];	//Linea/#produzione in cui compare l'errore
 }Errors;
+
 typedef struct
 {
 	Symbol word[MAX_WORD_LENGTH];

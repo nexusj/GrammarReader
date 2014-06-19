@@ -1,3 +1,15 @@
+/********************************************************************
+	created:	2014/06/19
+	created:	19:6:2014   12:26
+	filename: 	C:\Users\NexusJ\Documents\GitHub\GrammarReader\CLexer\scanner.h
+	file path:	C:\Users\NexusJ\Documents\GitHub\GrammarReader\CLexer
+	file base:	scanner
+	file ext:	h
+	author:		Vito Palumbo (aka NexusJ)
+	
+	purpose:	Questo progetto fornisce un lexer per un linguaggio C-like (riconosce quasi tutto del C)
+*********************************************************************/
+
 #ifndef _SCANNER_H
 #define _SCANNER_H
 #define _CRT_SECURE_NO_WARNINGS
@@ -38,7 +50,6 @@ typedef enum
 	DOUBLE,
 	LONG,
 	STRING,
-	INC,
 	ERROR
 } TokenType;
 
