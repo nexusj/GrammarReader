@@ -2,7 +2,7 @@ GrammarReader
 =============
 A university project for "Programming language theory" class @ [DIB](http://www.uniba.it/ricerca/dipartimenti/informatica).
 
-##Content
+## Content
 You'll find a:
 * C-like/Pascal-like Lexer;
 * DFA (deterministic finite automaton;
