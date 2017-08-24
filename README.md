@@ -9,8 +9,8 @@ You'll find a:
 * Date-DFA and a GrammarReader
 
 
-##Authors
-NexusjEden : https://twitter.com/NexusEden
+## Authors
+ReiNiru : https://twitter.com/ReiNiru
 
-##Disclaimer
+## Disclaimer
 You are **free** to use it as you like
